@@ -11,10 +11,6 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 PROMPT='%n '
 
-#make tmux load file fron the conf directory instead of the default one
-export TMUX_CONF="$HOME/.config/tmux/tmux.conf"
-alias tmux="tmux -f $TMUX_CONF"
-
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
@@ -107,11 +103,3 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-export PATH=$PATH:$JAVA_HOME/bin
-
-export ANDROID_HOME=/home/relextm19/data/Android/SDK
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
