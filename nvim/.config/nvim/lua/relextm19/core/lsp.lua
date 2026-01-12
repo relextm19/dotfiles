@@ -48,3 +48,29 @@ vim.diagnostic.config({
     },
 })
 
+-- Global auto-command to enable formatting on save for any attached LSP
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = true }),
+    callback = function(event)
+        -- 1. Get the client that just attached
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if not client then return end
+
+        -- 2. Check if the client supports formatting
+        if client.supports_method("textDocument/formatting") then
+            -- 3. Create a buffer-local autocmd for BufWritePre
+            --    We use a unique group name per buffer to ensure we don't stack multiple 
+            --    commands if multiple servers attach to the same file.
+            local group = vim.api.nvim_create_augroup("LspFormatting-" .. event.buf, { clear = true })
+
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                group = group,
+                buffer = event.buf,
+                callback = function()
+                    -- format the buffer synchronously
+                    vim.lsp.buf.format({ async = false, bufnr = event.buf })
+                end,
+            })
+        end
+    end,
+})
