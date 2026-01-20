@@ -1,6 +1,9 @@
 -- Enable LSP servers
-vim.lsp.enable({ "gopls", "lua_ls", "ts_ls", "vtsls", "tailwindcss"})
-local vue_language_server_path = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+vim.lsp.enable({ "gopls", "lua_ls", "ts_ls", "vtsls", "tailwindcss" })
+
+-- setup vue
+local vue_language_server_path = vim.fn.stdpath('data') ..
+    "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 local vue_plugin = {
     name = '@vue/typescript-plugin',
     location = vue_language_server_path,
@@ -21,12 +24,25 @@ vim.lsp.config('vtsls', {
 })
 vim.lsp.enable('vue_ls')
 
+--setup godot
+vim.lsp.config('gdscript', {
+    cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+    root_markers = { 'project.godot', '.git' },
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'gdscript',
+    callback = function(args)
+        -- Enable the client specifically for this buffer
+        vim.lsp.enable('gdscript', { bufnr = args.buf })
+    end,
+})
+
 -- Diagnostics setup
 vim.diagnostic.config({
     underline = true,
     virtual_text = {
-        spacing = 4,             -- a bit of space from the code
-        source = "if_many",      -- show the source if multiple LSPs
+        spacing = 4,                  -- a bit of space from the code
         format = function(diagnostic)
             return diagnostic.message -- just the message at end of line
         end,
@@ -59,7 +75,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         -- 2. Check if the client supports formatting
         if client.supports_method("textDocument/formatting") then
             -- 3. Create a buffer-local autocmd for BufWritePre
-            --    We use a unique group name per buffer to ensure we don't stack multiple 
+            --    We use a unique group name per buffer to ensure we don't stack multiple
             --    commands if multiple servers attach to the same file.
             local group = vim.api.nvim_create_augroup("LspFormatting-" .. event.buf, { clear = true })
 

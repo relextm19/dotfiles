@@ -9,6 +9,7 @@ local colors = require("relextm19.plugins.colors")
 local autotag = require("relextm19.plugins.autotag")
 local surround = require("relextm19.plugins.surround")
 local startup = require("relextm19.plugins.startup")
+local godot = require("relextm19.plugins.vim-godot")
 
 return { unpack(oil), unpack(mason), unpack(treesitter), unpack(autopairs), unpack(blink), unpack(telescope), unpack(
-lspconfing), unpack(colors), unpack(autotag), unpack(surround), unpack(startup) }
+    lspconfing), unpack(colors), unpack(autotag), unpack(surround), unpack(startup), unpack(godot) }
