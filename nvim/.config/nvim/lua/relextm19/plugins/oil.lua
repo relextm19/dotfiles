@@ -12,10 +12,13 @@ return {
                 keymaps = {
                     ["<C-p>"] = false,
                     ["q"] = "actions.close",
-                }
+                },
+                view_options = {
+                    show_hidden = true
+                },
             })
 
-            -- Create the Autocommand
+            --previev files
             vim.api.nvim_create_autocmd("User", {
                 pattern = "OilEnter",
                 callback = function()
