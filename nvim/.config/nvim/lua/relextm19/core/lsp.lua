@@ -1,6 +1,3 @@
--- Enable LSP servers
-vim.lsp.enable({ "gopls", "lua_ls", "ts_ls", "vtsls", "tailwindcss" })
-
 -- setup vue
 local vue_language_server_path = vim.fn.stdpath('data') ..
     "/mason/packages/vue-language-server/node_modules/@vue/language-server"
@@ -10,19 +7,21 @@ local vue_plugin = {
     languages = { 'vue' },
     configNamespace = 'typescript',
 }
+
 vim.lsp.config('vtsls', {
     settings = {
         vtsls = {
             tsserver = {
-                globalPlugins = {
-                    vue_plugin,
-                },
+                globalPlugins = { vue_plugin },
             },
         },
     },
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+    single_file_support = true,
 })
-vim.lsp.enable('vue_ls')
+
+vim.lsp.enable({ "gopls", "lua_ls", "vtsls", "tailwindcss", "vue_ls", "html", "cssls", "emmet_language_server" })
 
 --setup godot
 vim.lsp.config('gdscript', {
