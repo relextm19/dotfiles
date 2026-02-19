@@ -17,21 +17,6 @@ return {
                     show_hidden = true
                 },
             })
-
-            --previev files
-            vim.api.nvim_create_autocmd("User", {
-                pattern = "OilEnter",
-                callback = function()
-                    vim.schedule(function()
-                        local oil = require("oil")
-                        -- Use internal utility to check if preview is already open
-                        -- This prevents the "toggle loop" (opening then closing)
-                        if require("oil.util").get_preview_win() == nil then
-                            oil.open_preview({ vertical = true, split = "botright" })
-                        end
-                    end)
-                end,
-            })
         end,
     }
 }

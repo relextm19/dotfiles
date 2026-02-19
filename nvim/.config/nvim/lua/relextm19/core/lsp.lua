@@ -21,7 +21,8 @@ vim.lsp.config('vtsls', {
     single_file_support = true,
 })
 
-vim.lsp.enable({ "gopls", "lua_ls", "vtsls", "tailwindcss", "vue_ls", "html", "cssls", "emmet_language_server" })
+vim.lsp.enable({ "gopls", "lua_ls", "vtsls", "tailwindcss", "vue_ls", "html", "cssls", "emmet_language_server",
+    "marksman" })
 
 --setup godot
 vim.lsp.config('gdscript', {
