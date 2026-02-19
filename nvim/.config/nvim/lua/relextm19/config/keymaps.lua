@@ -11,7 +11,7 @@ map("n", "<leader>P", '"+P', { desc = "Paste from system clipboard before cursor
 
 vim.keymap.set('n', '<Esc>', ':noh<CR><Esc>', { noremap = true, silent = true })
 
-map('n', '<leader>rr', ':source %<CR>')
+map('n', '<leader>rr', ':Lazy reload timetracker<CR>') --only for plugin development
 
 map("n", "<leader>k", function() vim.diagnostic.open_float() end)
 

@@ -4,5 +4,5 @@ font-family = "JetBrainsMono Nerd Font"
 font-style = Regular
 font-size = 12
 
-theme = Rose Pine
-
+theme = "Rose Pine"
+background = #000000

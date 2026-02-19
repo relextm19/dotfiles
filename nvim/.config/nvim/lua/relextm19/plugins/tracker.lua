@@ -1,7 +1,10 @@
 return {
     {
-        dir = "~/code/timetracker.nvim", -- Path to your plugin's root folder
-        name = "timetracker",            -- Optional: give it a custom name in the Lazy UI
+        dir = "~/code/timetracker.nvim",
+        name = "timetracker",
+        dependencies = {
+            "kkharji/sqlite.lua"
+        },
         config = function()
             require('timetracker').setup()
         end,

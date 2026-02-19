@@ -22,7 +22,7 @@ vim.lsp.config('vtsls', {
 })
 
 vim.lsp.enable({ "gopls", "lua_ls", "vtsls", "tailwindcss", "vue_ls", "html", "cssls", "emmet_language_server",
-    "marksman" })
+    "marksman", "sqls" })
 
 --setup godot
 vim.lsp.config('gdscript', {
