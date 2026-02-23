@@ -3,6 +3,7 @@ local map = vim.keymap.set
 vim.g.mapleader = " "
 
 map("n", "<leader>e", ":Oil<CR>", { desc = "Open oil" })
+map("n", "<leader>zz", ":LazyGit<CR>", { desc = "Open LazyGit" })
 
 map({ "n", "v" }, "<leader>y", [["+y]])
 map("n", "<leader>Y", [["+Y]])
