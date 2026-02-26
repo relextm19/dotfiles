@@ -5,63 +5,57 @@ vim.g.mapleader = " "
 map("n", "<leader>e", ":Oil<CR>", { desc = "Open oil" })
 map("n", "<leader>zz", ":LazyGit<CR>", { desc = "Open LazyGit" })
 
-map({ "n", "v" }, "<leader>y", [["+y]])
-map("n", "<leader>Y", [["+Y]])
+-- Clipboard
+map({ "n", "v" }, "<leader>y", [["+y]], { desc = "Copy to system clipboard" })
+map("n", "<leader>Y", [["+Y]], { desc = "Copy line to system clipboard" })
 map("n", "<leader>p", '"+p', { desc = "Paste from system clipboard after cursor" })
 map("n", "<leader>P", '"+P', { desc = "Paste from system clipboard before cursor" })
 
-vim.keymap.set('n', '<Esc>', ':noh<CR><Esc>', { noremap = true, silent = true })
+-- General
+map('n', '<Esc>', ':noh<CR><Esc>', { noremap = true, silent = true, desc = "Clear search highlights" })
+map('n', '<leader>rr', ':Lazy reload timetracker<CR>', { desc = "Reload timetracker plugin" })
+map("n", "<leader>k", function() vim.diagnostic.open_float() end, { desc = "Open floating diagnostic" })
 
-map('n', '<leader>rr', ':Lazy reload timetracker<CR>') --only for plugin development
+-- Window Navigation & Splits
+map('n', '<C-h>', '<C-w>h', { desc = "Move to left window" })
+map('n', '<C-j>', '<C-w>j', { desc = "Move to lower window" })
+map('n', '<C-k>', '<C-w>k', { desc = "Move to upper window" })
+map('n', '<C-l>', '<C-w>l', { desc = "Move to right window" })
+map('n', '<leader>v', '<cmd>vsplit<cr>', { desc = "Split window vertically" })
+map('n', '<leader>s', '<cmd>split<cr>', { desc = "Split window horizontally" })
 
-map("n", "<leader>k", function() vim.diagnostic.open_float() end)
-
-map('n', '<C-h>', '<C-w>h')
-map('n', '<C-j>', '<C-w>j')
-map('n', '<C-k>', '<C-w>k')
-map('n', '<C-l>', '<C-w>l')
-map('n', '<leader>v', '<cmd>vsplit<cr>')
-map('n', '<leader>s', '<cmd>split<cr>')
-
+-- LSP
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local bufnr = args.buf
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if not client then return end
 
-        local opts = { buffer = bufnr, silent = true, noremap = true }
+        -- Helper to easily add descriptions without repeating the opts table
+        local function lsp_map(mode, lhs, rhs, desc)
+            map(mode, lhs, rhs, { buffer = bufnr, silent = true, noremap = true, desc = desc })
+        end
 
-        map("n", "gd", vim.lsp.buf.definition, opts)
-        map("n", "gD", vim.lsp.buf.declaration, opts)
-        map("n", "gr", vim.lsp.buf.references, opts)
-        map("n", "gi", vim.lsp.buf.implementation, opts)
-        map("n", "K", vim.lsp.buf.hover, opts)
-        map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+        lsp_map("n", "gd", vim.lsp.buf.definition, "LSP: Go to definition")
+        lsp_map("n", "gD", vim.lsp.buf.declaration, "LSP: Go to declaration")
+        lsp_map("n", "gr", vim.lsp.buf.references, "LSP: Show references")
+        lsp_map("n", "gi", vim.lsp.buf.implementation, "LSP: Go to implementation")
+        lsp_map("n", "K", vim.lsp.buf.hover, "LSP: Hover documentation")
+        lsp_map("n", "<leader>rn", vim.lsp.buf.rename, "LSP: Rename symbol")
     end,
 })
 
-local telescope_opts = { noremap = true, silent = true }
+-- Telescope
+-- Helper for telescope mappings to keep things clean
+local function tele_map(lhs, rhs, desc)
+    map("n", lhs, rhs, { noremap = true, silent = true, desc = desc })
+end
 
-map("n", "<leader>ff", function() require("telescope.builtin").find_files() end, telescope_opts)
--- map("n", "<leader>ff", function() require("telescope.builtin").git_files() end, telescope_opts)
-map("n", "<leader>fg", function() require("telescope.builtin").live_grep() end, telescope_opts)
-map("n", "<leader>fb", function() require("telescope.builtin").buffers() end, telescope_opts)
-map("n", "<leader>fh", function() require("telescope.builtin").help_tags() end, telescope_opts)
-map("n", "<leader>ft", function() require("telescope.builtin").tags() end, telescope_opts)
-map("n", "<leader>fc", function() require("telescope.builtin").commands() end, telescope_opts)
-map("n", "<leader>fk", function() require("telescope.builtin").keymaps() end, telescope_opts)
-
---harpoon keybinds
-local harpoon = require("harpoon")
-harpoon:setup()
-vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
-vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-
-vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
-vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
-vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
-vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
-
--- Toggle previous & next buffers stored within Harpoon list
-vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
-vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
+tele_map("<leader>ff", function() require("telescope.builtin").find_files() end, "Telescope: Find files")
+-- tele_map("<leader>ff", function() require("telescope.builtin").git_files() end, "Telescope: Git files")
+tele_map("<leader>fg", function() require("telescope.builtin").live_grep() end, "Telescope: Live grep")
+tele_map("<leader>fb", function() require("telescope.builtin").buffers() end, "Telescope: Find buffers")
+tele_map("<leader>fh", function() require("telescope.builtin").help_tags() end, "Telescope: Help tags")
+tele_map("<leader>ft", function() require("telescope.builtin").tags() end, "Telescope: Find tags")
+tele_map("<leader>fc", function() require("telescope.builtin").commands() end, "Telescope: Find commands")
+tele_map("<leader>fk", function() require("telescope.builtin").keymaps() end, "Telescope: Find keymaps")
