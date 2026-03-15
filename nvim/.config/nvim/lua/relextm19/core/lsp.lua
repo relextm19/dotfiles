@@ -1,24 +1,21 @@
--- setup vue
-local vue_language_server_path = vim.fn.stdpath('data') ..
-    "/mason/packages/vue-language-server/node_modules/@vue/language-server"
-local vue_plugin = {
-    name = '@vue/typescript-plugin',
-    location = vue_language_server_path,
-    languages = { 'vue' },
-    configNamespace = 'typescript',
-}
+local mason_root = require("mason.settings").current.install_root_dir
+local vue_language_server_path = mason_root .. '/packages/vue-language-server/node_modules/@vue/language-server'
 
 vim.lsp.config('vtsls', {
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
     settings = {
         vtsls = {
             tsserver = {
-                globalPlugins = { vue_plugin },
+                globalPlugins = {
+                    {
+                        name = '@vue/typescript-plugin',
+                        location = vue_language_server_path,
+                        languages = { 'vue' },
+                    },
+                },
             },
         },
     },
-    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-    root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
-    single_file_support = true,
 })
 
 vim.lsp.enable({ "gopls", "lua_ls", "vtsls", "tailwindcss", "vue_ls", "html", "cssls", "emmet_language_server",
