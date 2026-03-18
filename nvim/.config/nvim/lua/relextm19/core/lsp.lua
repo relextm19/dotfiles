@@ -11,6 +11,8 @@ vim.lsp.config('vtsls', {
                         name = '@vue/typescript-plugin',
                         location = vue_language_server_path,
                         languages = { 'vue' },
+                        configNamespace = 'typescript',
+                        enableForWorkspaceTypeScriptVersions = true,
                     },
                 },
             },
